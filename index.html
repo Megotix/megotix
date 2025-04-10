@@ -4,19 +4,23 @@
     <title>Мой первый сайт</title>
     <style>
         body { 
-            background: #f0f0f0; 
+            background: url('https://img.freepik.com/free-photo/lone-tree_181624-46361.jpg?t=st=1744305097~exp=1744308697~hmac=9b3f158806e7d7aefa877c09534dcc9e26d6a9dedda80ae1e97967d26f80693f&w=996') no-repeat center center fixed; 
+            background-size: cover;
             font-family: Arial; 
             text-align: center; 
             margin: 0;
             padding: 20px;
+            color: white; /* Добавил белый цвет текста для лучшей читаемости на фоне */
         }
         h1 { 
-            color: blue; 
+            color: white; /* Изменил на белый для лучшей видимости */
             margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Тень текста для контраста */
         }
         p {
             font-size: 18px;
             margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Тень текста для контраста */
         }
         .btn { 
             background: orange; 
@@ -26,6 +30,9 @@
             border-radius: 5px;
             display: inline-block;
             margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
         }
         .btn:hover {
             background: darkorange;
@@ -34,15 +41,32 @@
             border: 3px solid #ddd;
             border-radius: 10px;
             margin: 20px 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            background-color: rgba(255,255,255,0.7); /* Полупрозрачный фон для картинки */
+            padding: 5px;
+        }
+        .content {
+            background-color: rgba(0,0,0,0.5); /* Полупрозрачный фон для контента */
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
-    <h1>Привет, мир!</h1>
-    <p>Это мой самый первый сайт. И в нем я приветствую полумертвого Салича</p>
-    <img src="https://img.freepik.com/free-vector/cat-lying-cartoon-character_1308-112828.jpg?t=st=1744303710~exp=1744307310~hmac=c5cab68670df74536e086ae03f8eb4ba6a5140fd74d55b0894fdc26b44cb885f&w=996" alt="Котик">
-    <br>
-    <a href="#" class="btn">нажми</a>
+    <div class="content">
+        <h1>Привет, мир!</h1>
+        <p>Это мой самый первый сайт. И в нем я приветствую полумертвого Салича</p>
+        <img src="https://img.freepik.com/free-vector/cat-lying-cartoon-character_1308-112828.jpg?t=st=1744303710~exp=1744307310~hmac=c5cab68670df74536e086ae03f8eb4ba6a5140fd74d55b0894fdc26b44cb885f&w=996" alt="Котик">
+        <br>
+        <button class="btn" onclick="showMessage()">Нажми меня</button>
+    </div>
+
+    <script>
+        function showMessage() {
+            alert("сосал?");
+        }
+    </script>
 </body>
 </html>
