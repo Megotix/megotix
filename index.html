@@ -1,79 +1,151 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Мой сайт</title>
+    <title>Сайт с секретной игрой</title>
     <style>
-        body { 
-            background: url('https://img.freepik.com/free-photo/lone-tree_181624-46361.jpg?t=st=1744305097~exp=1744308697~hmac=9b3f158806e7d7aefa877c09534dcc9e26d6a9dedda80ae1e97967d26f80693f&w=996') no-repeat center center fixed; 
-            background-size: cover;
-            font-family: Arial; 
-            text-align: center; 
+        body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
             color: white;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://img.freepik.com/free-photo/lone-tree_181624-46361.jpg') no-repeat center center;
+            background-size: cover;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
-        h1 { 
-            color: white;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        p {
-            font-size: 18px;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-        .btn { 
-            background: orange; 
-            color: white; 
-            padding: 10px 20px; 
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            margin-top: 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .btn:hover {
-            background: darkorange;
-        }
-        .cat-image {
-            border: 3px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            background-color: rgba(255,255,255,0.7);
-            padding: 5px;
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto 20px;
-        }
+
         .content {
-            background-color: rgba(0,0,0,0.5);
-            padding: 30px;
-            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 20px;
             max-width: 800px;
             width: 90%;
-            margin: 0 auto;
+            box-shadow: 0 0 30px rgba(255, 165, 0, 0.5);
+            border: 1px solid orange;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: orange;
+            text-shadow: 0 0 10px rgba(255, 165, 0, 0.8);
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff8c00, #ff4500);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.4);
+            margin: 10px;
+        }
+
+        .game-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #game-cat {
+            width: 100px;
+            position: absolute;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        #score {
+            color: orange;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <div class="content">
-        <h1>Салам!</h1>
-        <p>Это мой самый первый сайт. И в нем я приветствую полумертвого Салича</p>
-        <img src="https://img.freepik.com/free-vector/cat-lying-cartoon-character_1308-112828.jpg?t=st=1744303710~exp=1744307310~hmac=c5cab68670df74536e086ae03f8eb4ba6a5140fd74d55b0894fdc26b44cb885f&w=996" alt="Котик" class="cat-image">
-        <button class="btn" onclick="showMessage()">Есть вопрос</button>
+        <h1>Секретный сайт</h1>
+        <p>Нажми на кнопку 3 раза для активации игры</p>
+        <button class="btn" id="mainBtn">Есть вопрос</button>
+    </div>
+
+    <div class="game-container" id="gameContainer">
+        <div id="score">Поймано: 0</div>
+        <img src="https://img.freepik.com/free-vector/cat-lying-cartoon-character_1308-112828.jpg" 
+             id="game-cat" 
+             alt="Цель">
     </div>
 
     <script>
-        function showMessage() {
-            alert("Сосал?");
+        const mainBtn = document.getElementById('mainBtn');
+        const gameContainer = document.getElementById('gameContainer');
+        const gameCat = document.getElementById('game-cat');
+        const scoreElement = document.getElementById('score');
+        
+        let clickCount = 0;
+        let score = 0;
+        let gameActive = false;
+
+        mainBtn.addEventListener('click', () => {
+            const answer = confirm("Сосал? (Нажми ОК для 'Да')");
+            if (answer) {
+                clickCount++;
+                
+                if (clickCount === 3) {
+                    startGame();
+                }
+            }
+        });
+
+        function startGame() {
+            gameContainer.style.display = 'flex';
+            gameActive = true;
+            score = 0;
+            scoreElement.textContent = `Поймано: ${score}`;
+            moveCat();
+        }
+
+        gameCat.addEventListener('click', () => {
+            score++;
+            scoreElement.textContent = `Поймано: ${score}`;
+            gameCat.style.transform = 'scale(0)';
+            setTimeout(() => {
+                if (gameActive) {
+                    moveCat();
+                    gameCat.style.transform = 'scale(1)';
+                }
+            }, 200);
+        });
+
+        function moveCat() {
+            if (!gameActive) return;
+            
+            const maxX = window.innerWidth - 100;
+            const maxY = window.innerHeight - 100;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            gameCat.style.left = `${randomX}px`;
+            gameCat.style.top = `${randomY}px`;
+            
+            setTimeout(moveCat, 1000);
         }
     </script>
 </body>
