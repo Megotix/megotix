@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Сайт пробник</title>
+    <title>Сайт для Салича</title>
     <style>
         body { 
             background: url('https://img.freepik.com/free-photo/lone-tree_181624-46361.jpg?t=st=1744305097~exp=1744308697~hmac=9b3f158806e7d7aefa877c09534dcc9e26d6a9dedda80ae1e97967d26f80693f&w=996') no-repeat center center fixed; 
@@ -82,7 +82,7 @@
             align-items: center;
         }
         .game-target {
-            width: 150px; /* Увеличил размер для вашего изображения */
+            width: 150px;
             height: 150px;
             position: absolute;
             cursor: pointer;
@@ -104,6 +104,35 @@
             font-size: 30px;
             cursor: pointer;
         }
+        
+        /* Стиль для финального сообщения */
+        .final-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 200;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: red;
+            font-size: 32px;
+            text-align: center;
+            padding: 20px;
+        }
+        .final-message button {
+            margin-top: 30px;
+            padding: 15px 30px;
+            font-size: 20px;
+            background: orange;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -121,6 +150,12 @@
         <img src="https://kudamoscow.ru/uploads/e468ffcdf40fcafb596ace53f0750b3c.jpg" class="game-target" id="gameTarget">
     </div>
 
+    <!-- Финальное сообщение -->
+    <div class="final-message" id="finalMessage">
+        <h2>Не играй с киской, раз ответил что сосал</h2>
+        <button onclick="location.reload()">Начать заново</button>
+    </div>
+
     <script>
         let clickCount = 0;
         let gameScore = 0;
@@ -132,6 +167,7 @@
         const gameTarget = document.getElementById('gameTarget');
         const gameScoreElement = document.getElementById('gameScore');
         const gameClose = document.getElementById('gameClose');
+        const finalMessage = document.getElementById('finalMessage');
         
         // Обработчик кнопки "Есть вопрос"
         questionBtn.addEventListener('click', function() {
@@ -176,7 +212,7 @@
         function moveTarget() {
             if (!gameActive) return;
             
-            const maxX = window.innerWidth - 150; // Учитываем новый размер
+            const maxX = window.innerWidth - 150;
             const maxY = window.innerHeight - 150;
             
             const randomX = Math.floor(Math.random() * maxX);
@@ -200,14 +236,26 @@
             setTimeout(() => {
                 this.style.transform = 'scale(1)';
             }, 200);
+            
+            // Проверка на 15 попаданий
+            if (gameScore >= 15) {
+                endGame();
+            }
         });
         
         // Закрытие игры
         gameClose.addEventListener('click', function() {
             gameActive = false;
             gameOverlay.style.display = 'none';
-            clickCount = 0; // Сбрасываем счетчик для повторной активации
+            clickCount = 0;
         });
+        
+        // Функция завершения игры
+        function endGame() {
+            gameActive = false;
+            gameOverlay.style.display = 'none';
+            finalMessage.style.display = 'flex';
+        }
     </script>
 </body>
 </html>
