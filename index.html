@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Мой первый сайт</title>
+    <title>Мой сайт</title>
     <style>
         body { 
             background: url('https://img.freepik.com/free-photo/lone-tree_181624-46361.jpg?t=st=1744305097~exp=1744308697~hmac=9b3f158806e7d7aefa877c09534dcc9e26d6a9dedda80ae1e97967d26f80693f&w=996') no-repeat center center fixed; 
@@ -10,17 +10,22 @@
             text-align: center; 
             margin: 0;
             padding: 20px;
-            color: white; /* Добавил белый цвет текста для лучшей читаемости на фоне */
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         h1 { 
-            color: white; /* Изменил на белый для лучшей видимости */
+            color: white;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Тень текста для контраста */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         p {
             font-size: 18px;
             margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Тень текста для контраста */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         .btn { 
             background: orange; 
@@ -37,35 +42,38 @@
         .btn:hover {
             background: darkorange;
         }
-        img {
+        .cat-image {
             border: 3px solid #ddd;
             border-radius: 10px;
-            margin: 20px 0;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            background-color: rgba(255,255,255,0.7); /* Полупрозрачный фон для картинки */
+            background-color: rgba(255,255,255,0.7);
             padding: 5px;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
         }
         .content {
-            background-color: rgba(0,0,0,0.5); /* Полупрозрачный фон для контента */
-            padding: 20px;
-            border-radius: 10px;
+            background-color: rgba(0,0,0,0.5);
+            padding: 30px;
+            border-radius: 15px;
             max-width: 800px;
+            width: 90%;
             margin: 0 auto;
         }
     </style>
 </head>
 <body>
     <div class="content">
-        <h1>Привет, мир!</h1>
+        <h1>Салам!</h1>
         <p>Это мой самый первый сайт. И в нем я приветствую полумертвого Салича</p>
-        <img src="https://img.freepik.com/free-vector/cat-lying-cartoon-character_1308-112828.jpg?t=st=1744303710~exp=1744307310~hmac=c5cab68670df74536e086ae03f8eb4ba6a5140fd74d55b0894fdc26b44cb885f&w=996" alt="Котик">
-        <br>
-        <button class="btn" onclick="showMessage()">Нажми меня</button>
+        <img src="https://img.freepik.com/free-vector/cat-lying-cartoon-character_1308-112828.jpg?t=st=1744303710~exp=1744307310~hmac=c5cab68670df74536e086ae03f8eb4ba6a5140fd74d55b0894fdc26b44cb885f&w=996" alt="Котик" class="cat-image">
+        <button class="btn" onclick="showMessage()">Есть вопрос</button>
     </div>
 
     <script>
         function showMessage() {
-            alert("сосал?");
+            alert("Сосал?");
         }
     </script>
 </body>
