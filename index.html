@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Сайт для Салича (Хардкор)</title>
+    <title>Сайт для Салича (Реалистичный режим)</title>
     <style>
         body { 
             background: url('https://img.freepik.com/free-photo/lone-tree_181624-46361.jpg?t=st=1744305097~exp=1744308697~hmac=9b3f158806e7d7aefa877c09534dcc9e26d6a9dedda80ae1e97967d26f80693f&w=996') no-repeat center center fixed; 
@@ -82,20 +82,19 @@
             align-items: center;
         }
         .game-target {
-            width: 120px; /* Чуть уменьшил для сложности */
-            height: 120px;
+            width: 150px;
+            height: 150px;
             position: absolute;
             cursor: pointer;
-            transition: all 0.05s linear; /* Ультра-быстрое движение */
+            transition: transform 0.5s ease-out; /* Плавное движение */
             object-fit: cover;
             border-radius: 10px;
-            border: 3px solid red; /* Красная рамка для опасности */
+            border: 3px solid orange;
         }
         .game-score {
-            color: red;
+            color: orange;
             font-size: 24px;
             margin-bottom: 20px;
-            text-shadow: 0 0 5px black;
         }
         .game-close {
             position: absolute;
@@ -104,7 +103,6 @@
             color: white;
             font-size: 30px;
             cursor: pointer;
-            z-index: 101;
         }
         
         /* Стиль для финального сообщения */
@@ -115,34 +113,32 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.9);
             z-index: 200;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             color: red;
-            font-size: 36px;
+            font-size: 32px;
             text-align: center;
             padding: 20px;
-            text-shadow: 0 0 10px black;
         }
         .final-message button {
             margin-top: 30px;
             padding: 15px 30px;
             font-size: 20px;
-            background: linear-gradient(to bottom, #ff0000, #990000);
+            background: orange;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(255,0,0,0.7);
         }
     </style>
 </head>
 <body>
     <div class="content">
         <h1>Салам!</h1>
-        <p>Это мой самый первый сайт. И в нем я приветствую полумертвого Салича, ответь на мой вопрос</p>
+        <p>Это мой самый первый сайт. И в нем я приветствую полумертвого Салича</p>
         <img src="https://img.freepik.com/free-vector/cat-lying-cartoon-character_1308-112828.jpg?t=st=1744303710~exp=1744307310~hmac=c5cab68670df74536e086ae03f8eb4ba6a5140fd74d55b0894fdc26b44cb885f&w=996" alt="Котик" class="cat-image" id="mainCat">
         <button class="btn" id="questionBtn">Есть вопрос</button>
     </div>
@@ -156,15 +152,18 @@
 
     <!-- Финальное сообщение -->
     <div class="final-message" id="finalMessage">
-        <h2>НЕ ИГРАЙ С КИСКОЙ,<br>РАЗ ОТВЕТИЛ ЧТО СОСАЛ</h2>
-        <button onclick="location.reload()">Попробовать снова</button>
+        <h2>Не играй с киской, раз ответил что сосал</h2>
+        <button onclick="location.reload()">Начать заново</button>
     </div>
 
     <script>
         let clickCount = 0;
         let gameScore = 0;
         let gameActive = false;
-        let moveSpeed = 300; // Начальная скорость (мс)
+        let targetX = 0;
+        let targetY = 0;
+        let velocityX = 2;
+        let velocityY = 2;
         
         const questionBtn = document.getElementById('questionBtn');
         const mainCat = document.getElementById('mainCat');
@@ -200,34 +199,49 @@
         function startGame() {
             gameScore = 0;
             gameActive = true;
-            moveSpeed = 300; // Сброс скорости
             gameScoreElement.textContent = 'Поймано: 0/15';
             gameOverlay.style.display = 'flex';
-            moveTarget();
+            
+            // Начальная позиция
+            targetX = window.innerWidth / 2 - 75;
+            targetY = window.innerHeight / 2 - 75;
+            velocityX = 2;
+            velocityY = 2;
+            
+            updateTargetPosition();
         }
         
-        // Перемещение цели в игре (сложный режим)
-        function moveTarget() {
+        // Обновление позиции с физикой
+        function updateTargetPosition() {
             if (!gameActive) return;
             
-            const maxX = window.innerWidth - 120;
-            const maxY = window.innerHeight - 120;
-            
-            // Резкие непредсказуемые движения
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-            
-            // Анимация через transform для плавности
-            gameTarget.style.transition = `all ${moveSpeed/1000}s linear`;
-            gameTarget.style.left = randomX + 'px';
-            gameTarget.style.top = randomY + 'px';
-            
-            // Постепенное ускорение
-            if (moveSpeed > 100) {
-                moveSpeed -= 5;
+            // Изменение направления при достижении границ
+            if (targetX <= 0 || targetX >= window.innerWidth - 150) {
+                velocityX = -velocityX * (0.9 + Math.random() * 0.2); // Небольшая случайность
+            }
+            if (targetY <= 0 || targetY >= window.innerHeight - 150) {
+                velocityY = -velocityY * (0.9 + Math.random() * 0.2);
             }
             
-            setTimeout(moveTarget, moveSpeed);
+            // Случайные изменения траектории
+            if (Math.random() < 0.05) {
+                velocityX += (Math.random() - 0.5) * 3;
+                velocityY += (Math.random() - 0.5) * 3;
+            }
+            
+            // Ограничение скорости
+            const maxSpeed = 5;
+            velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
+            velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
+            
+            // Обновление позиции
+            targetX += velocityX;
+            targetY += velocityY;
+            
+            // Применение позиции
+            gameTarget.style.transform = `translate(${targetX}px, ${targetY}px)`;
+            
+            requestAnimationFrame(updateTargetPosition);
         }
         
         // Обработчик клика по цели
@@ -237,12 +251,10 @@
             gameScore++;
             gameScoreElement.textContent = `Поймано: ${gameScore}/15`;
             
-            // Визуальный эффект попадания
-            this.style.border = '5px solid lime';
-            this.style.boxShadow = '0 0 20px lime';
+            // Эффект при попадании
+            this.style.border = '3px solid lime';
             setTimeout(() => {
-                this.style.border = '3px solid red';
-                this.style.boxShadow = 'none';
+                this.style.border = '3px solid orange';
             }, 200);
             
             // Проверка на победу
@@ -254,10 +266,8 @@
         // Завершение игры
         function endGame() {
             gameActive = false;
-            setTimeout(() => {
-                gameOverlay.style.display = 'none';
-                finalMessage.style.display = 'flex';
-            }, 500);
+            gameOverlay.style.display = 'none';
+            finalMessage.style.display = 'flex';
         }
         
         // Закрытие игры
