@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Сайт для Салича (Реалистичный режим)</title>
+    <title>Сайт для Салича </title>
     <style>
         body { 
             background: url('https://img.freepik.com/free-photo/lone-tree_181624-46361.jpg?t=st=1744305097~exp=1744308697~hmac=9b3f158806e7d7aefa877c09534dcc9e26d6a9dedda80ae1e97967d26f80693f&w=996') no-repeat center center fixed; 
@@ -188,8 +188,8 @@
                     }, 100);
                 }, 100);
                 
-                // Активация игры после 3 кликов
-                if (clickCount >= 3) {
+                // Активация игры после 1 кликов
+                if (clickCount >= 1) {
                     startGame();
                 }
             }
@@ -217,10 +217,10 @@
             
             // Изменение направления при достижении границ
             if (targetX <= 0 || targetX >= window.innerWidth - 150) {
-                velocityX = -velocityX * (0.9 + Math.random() * 0.2); // Небольшая случайность
+                velocityX = -velocityX * (0.9 + Math.random() * 0.5); // Небольшая случайность
             }
             if (targetY <= 0 || targetY >= window.innerHeight - 150) {
-                velocityY = -velocityY * (0.9 + Math.random() * 0.2);
+                velocityY = -velocityY * (0.9 + Math.random() * 0.5);
             }
             
             // Случайные изменения траектории
@@ -230,7 +230,7 @@
             }
             
             // Ограничение скорости
-            const maxSpeed = 5;
+            const maxSpeed = 7;
             velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
             velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
             
@@ -258,7 +258,7 @@
             }, 200);
             
             // Проверка на победу
-            if (gameScore >= 15) {
+            if (gameScore >= 10) {
                 endGame();
             }
         });
