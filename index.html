@@ -95,7 +95,7 @@
             height: 100px;
             position: fixed;
             cursor: pointer;
-            transition: left 0.3s linear, top 0.3s linear;
+            transition: left 0.2s linear, top 0.2s linear;
             object-fit: cover;
             border-radius: 10px;
             border: 3px solid orange;
@@ -192,10 +192,11 @@
         let gameActive = false;
         let targetX = 0;
         let targetY = 0;
-        let velocityX = 1.5;
-        let velocityY = 1.5;
+        let velocityX = 0;
+        let velocityY = 0;
         let targetSize = 100;
         let animationFrameId;
+        const maxSpeed = 12;
         
         const questionBtn = document.getElementById('questionBtn');
         const gameOverlay = document.getElementById('gameOverlay');
@@ -239,13 +240,12 @@
             gameScoreElement.textContent = 'Поймано: 0/10';
             gameOverlay.style.display = 'flex';
             
-            // Начальная позиция
+            // Начальная позиция и скорость
             targetX = Math.random() * (window.innerWidth - targetSize);
             targetY = Math.random() * (window.innerHeight - targetSize);
-            velocityX = (Math.random() - 0.5) * 3;
-            velocityY = (Math.random() - 0.5) * 3;
+            velocityX = (Math.random() - 0.5) * 8;
+            velocityY = (Math.random() - 0.5) * 8;
             
-            // Установка начальной позиции
             gameTarget.style.left = `${targetX}px`;
             gameTarget.style.top = `${targetY}px`;
             
@@ -258,23 +258,28 @@
             
             const maxX = window.innerWidth - targetSize;
             const maxY = window.innerHeight - targetSize;
-            const maxSpeed = 5;
             
-            // Проверка границ с жёсткой фиксацией
+            // Проверка границ с отскоком
             if (targetX < 0) {
                 targetX = 0;
-                velocityX = -velocityX * 0.8;
+                velocityX = -velocityX * 0.9;
             } else if (targetX > maxX) {
                 targetX = maxX;
-                velocityX = -velocityX * 0.8;
+                velocityX = -velocityX * 0.9;
             }
             
             if (targetY < 0) {
                 targetY = 0;
-                velocityY = -velocityY * 0.8;
+                velocityY = -velocityY * 0.9;
             } else if (targetY > maxY) {
                 targetY = maxY;
-                velocityY = -velocityY * 0.8;
+                velocityY = -velocityY * 0.9;
+            }
+            
+            // Случайные изменения траектории
+            if (Math.random() < 0.1) {
+                velocityX += (Math.random() - 0.5) * 4;
+                velocityY += (Math.random() - 0.5) * 4;
             }
             
             // Ограничение скорости
@@ -285,7 +290,6 @@
             targetX += velocityX;
             targetY += velocityY;
             
-            // Применение позиции
             gameTarget.style.left = `${targetX}px`;
             gameTarget.style.top = `${targetY}px`;
             
