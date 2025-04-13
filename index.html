@@ -199,7 +199,7 @@
         function startGame() {
             gameScore = 0;
             gameActive = true;
-            gameScoreElement.textContent = 'Поймано: 0/15';
+            gameScoreElement.textContent = 'Поймано: 0/10';
             gameOverlay.style.display = 'flex';
             
             // Начальная позиция
@@ -230,7 +230,7 @@
             }
             
             // Ограничение скорости
-            const maxSpeed = 7;
+            const maxSpeed = 10;
             velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
             velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
             
@@ -249,7 +249,7 @@
             if (!gameActive) return;
             
             gameScore++;
-            gameScoreElement.textContent = `Поймано: ${gameScore}/15`;
+            gameScoreElement.textContent = `Поймано: ${gameScore}/10`;
             
             // Эффект при попадании
             this.style.border = '3px solid lime';
