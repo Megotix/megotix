@@ -196,7 +196,8 @@
         let velocityY = 0;
         let targetSize = 100;
         let animationFrameId;
-        const maxSpeed = 12;
+        let currentMaxSpeed = 8; // Начальная максимальная скорость
+        const speedIncreaseFactor = 1.2; // Коэффициент увеличения скорости
         
         const questionBtn = document.getElementById('questionBtn');
         const gameOverlay = document.getElementById('gameOverlay');
@@ -237,14 +238,15 @@
             updateTargetSize();
             gameScore = 0;
             gameActive = true;
+            currentMaxSpeed = 8; // Сброс скорости при начале игры
             gameScoreElement.textContent = 'Поймано: 0/10';
             gameOverlay.style.display = 'flex';
             
             // Начальная позиция и скорость
             targetX = Math.random() * (window.innerWidth - targetSize);
             targetY = Math.random() * (window.innerHeight - targetSize);
-            velocityX = (Math.random() - 0.5) * 8;
-            velocityY = (Math.random() - 0.5) * 8;
+            velocityX = (Math.random() - 0.5) * currentMaxSpeed;
+            velocityY = (Math.random() - 0.5) * currentMaxSpeed;
             
             gameTarget.style.left = `${targetX}px`;
             gameTarget.style.top = `${targetY}px`;
@@ -278,13 +280,13 @@
             
             // Случайные изменения траектории
             if (Math.random() < 0.1) {
-                velocityX += (Math.random() - 0.5) * 4;
-                velocityY += (Math.random() - 0.5) * 4;
+                velocityX += (Math.random() - 0.5) * 3;
+                velocityY += (Math.random() - 0.5) * 3;
             }
             
             // Ограничение скорости
-            velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
-            velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
+            velocityX = Math.max(-currentMaxSpeed, Math.min(currentMaxSpeed, velocityX));
+            velocityY = Math.max(-currentMaxSpeed, Math.min(currentMaxSpeed, velocityY));
             
             // Обновление позиции
             targetX += velocityX;
@@ -302,6 +304,11 @@
             
             gameScore++;
             gameScoreElement.textContent = `Поймано: ${gameScore}/10`;
+            
+            // Увеличение скорости после каждого попадания
+            currentMaxSpeed *= speedIncreaseFactor;
+            velocityX *= speedIncreaseFactor;
+            velocityY *= speedIncreaseFactor;
             
             // Эффект при попадании
             this.style.border = '3px solid lime';
