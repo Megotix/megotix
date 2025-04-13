@@ -213,36 +213,47 @@
         
         // Обновление позиции с физикой
         function updateTargetPosition() {
-            if (!gameActive) return;
-            
-            // Изменение направления при достижении границ
-            if (targetX <= 0 || targetX >= window.innerWidth - 150) {
-                velocityX = -velocityX * (0.9 + Math.random() * 0.5); // Небольшая случайность
-            }
-            if (targetY <= 0 || targetY >= window.innerHeight - 150) {
-                velocityY = -velocityY * (0.9 + Math.random() * 0.5);
-            }
-            
-            // Случайные изменения траектории
-            if (Math.random() < 0.05) {
-                velocityX += (Math.random() - 0.5) * 3;
-                velocityY += (Math.random() - 0.5) * 3;
-            }
-            
-            // Ограничение скорости
-            const maxSpeed = 10;
-            velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
-            velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
-            
-            // Обновление позиции
-            targetX += velocityX;
-            targetY += velocityY;
-            
-            // Применение позиции
-            gameTarget.style.transform = `translate(${targetX}px, ${targetY}px)`;
-            
-            requestAnimationFrame(updateTargetPosition);
-        }
+    if (!gameActive) return;
+    
+    // Получаем размеры окна и цели
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    const targetWidth = 150; // Ширина gameTarget
+    const targetHeight = 150; // Высота gameTarget
+    
+    // Изменение направления при достижении границ (с учетом размера цели)
+    if (targetX <= 0 || targetX >= windowWidth - targetWidth) {
+        velocityX = -velocityX * (0.9 + Math.random() * 0.5);
+        // Корректировка позиции, чтобы не застревать за границей
+        targetX = Math.max(0, Math.min(targetX, windowWidth - targetWidth));
+    }
+    
+    if (targetY <= 0 || targetY >= windowHeight - targetHeight) {
+        velocityY = -velocityY * (0.9 + Math.random() * 0.5);
+        // Корректировка позиции, чтобы не застревать за границей
+        targetY = Math.max(0, Math.min(targetY, windowHeight - targetHeight));
+    }
+    
+    // Случайные изменения траектории
+    if (Math.random() < 0.05) {
+        velocityX += (Math.random() - 0.5) * 3;
+        velocityY += (Math.random() - 0.5) * 3;
+    }
+    
+    // Ограничение скорости
+    const maxSpeed = 10;
+    velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
+    velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
+    
+    // Обновление позиции
+    targetX += velocityX;
+    targetY += velocityY;
+    
+    // Применение позиции
+    gameTarget.style.transform = `translate(${targetX}px, ${targetY}px)`;
+    
+    requestAnimationFrame(updateTargetPosition);
+}
         
         // Обработчик клика по цели
         gameTarget.addEventListener('click', function() {
