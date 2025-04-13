@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Сайт </title>
+    <title>Сайт</title>
     <style>
         body { 
             background: url('https://img.freepik.com/free-photo/lone-tree_181624-46361.jpg?t=st=1744305097~exp=1744308697~hmac=9b3f158806e7d7aefa877c09534dcc9e26d6a9dedda80ae1e97967d26f80693f&w=996') no-repeat center center fixed; 
@@ -86,7 +86,7 @@
             height: 150px;
             position: absolute;
             cursor: pointer;
-            transition: transform 0.5s ease-out; /* Плавное движение */
+            transition: transform 0.5s ease-out;
             object-fit: cover;
             border-radius: 10px;
             border: 3px solid orange;
@@ -188,7 +188,7 @@
                     }, 100);
                 }, 100);
                 
-                // Активация игры после 1 кликов
+                // Активация игры после 1 клика
                 if (clickCount >= 1) {
                     startGame();
                 }
@@ -202,7 +202,7 @@
             gameScoreElement.textContent = 'Поймано: 0/10';
             gameOverlay.style.display = 'flex';
             
-            // Начальная позиция
+            // Начальная позиция (центр экрана)
             targetX = window.innerWidth / 2 - 75;
             targetY = window.innerHeight / 2 - 75;
             velocityX = 2;
@@ -211,49 +211,48 @@
             updateTargetPosition();
         }
         
-        // Обновление позиции с физикой
+        // Обновление позиции с учетом границ экрана
         function updateTargetPosition() {
-    if (!gameActive) return;
-    
-    // Получаем размеры окна и цели
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-    const targetWidth = 150; // Ширина gameTarget
-    const targetHeight = 150; // Высота gameTarget
-    
-    // Изменение направления при достижении границ (с учетом размера цели)
-    if (targetX <= 0 || targetX >= windowWidth - targetWidth) {
-        velocityX = -velocityX * (0.9 + Math.random() * 0.5);
-        // Корректировка позиции, чтобы не застревать за границей
-        targetX = Math.max(0, Math.min(targetX, windowWidth - targetWidth));
-    }
-    
-    if (targetY <= 0 || targetY >= windowHeight - targetHeight) {
-        velocityY = -velocityY * (0.9 + Math.random() * 0.5);
-        // Корректировка позиции, чтобы не застревать за границей
-        targetY = Math.max(0, Math.min(targetY, windowHeight - targetHeight));
-    }
-    
-    // Случайные изменения траектории
-    if (Math.random() < 0.05) {
-        velocityX += (Math.random() - 0.5) * 3;
-        velocityY += (Math.random() - 0.5) * 3;
-    }
-    
-    // Ограничение скорости
-    const maxSpeed = 10;
-    velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
-    velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
-    
-    // Обновление позиции
-    targetX += velocityX;
-    targetY += velocityY;
-    
-    // Применение позиции
-    gameTarget.style.transform = `translate(${targetX}px, ${targetY}px)`;
-    
-    requestAnimationFrame(updateTargetPosition);
-}
+            if (!gameActive) return;
+            
+            const targetWidth = 150; // Ширина цели
+            const targetHeight = 150; // Высота цели
+            const maxX = window.innerWidth - targetWidth;
+            const maxY = window.innerHeight - targetHeight;
+            
+            // Проверка границ и изменение направления
+            if (targetX <= 0 || targetX >= maxX) {
+                velocityX = -velocityX;
+                // Корректировка, чтобы не застревать за границей
+                targetX = Math.max(0, Math.min(targetX, maxX));
+            }
+            
+            if (targetY <= 0 || targetY >= maxY) {
+                velocityY = -velocityY;
+                // Корректировка, чтобы не застревать за границей
+                targetY = Math.max(0, Math.min(targetY, maxY));
+            }
+            
+            // Случайные изменения траектории (для разнообразия)
+            if (Math.random() < 0.05) {
+                velocityX += (Math.random() - 0.5) * 3;
+                velocityY += (Math.random() - 0.5) * 3;
+            }
+            
+            // Ограничение скорости (чтобы не слишком быстро)
+            const maxSpeed = 8;
+            velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
+            velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
+            
+            // Обновление позиции
+            targetX += velocityX;
+            targetY += velocityY;
+            
+            // Применение позиции (с плавным движением)
+            gameTarget.style.transform = `translate(${targetX}px, ${targetY}px)`;
+            
+            requestAnimationFrame(updateTargetPosition);
+        }
         
         // Обработчик клика по цели
         gameTarget.addEventListener('click', function() {
