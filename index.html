@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Сайт</title>
+    <title>Ловля котика</title>
     <style>
         body { 
             background: url('https://img.freepik.com/free-photo/lone-tree_181624-46361.jpg') no-repeat center center fixed; 
@@ -93,14 +93,16 @@
         .game-target {
             width: 100px;
             height: 100px;
-            position: absolute;
+            position: fixed;
             cursor: pointer;
-            transition: transform 0.3s ease-out;
+            transition: left 0.3s linear, top 0.3s linear;
             object-fit: cover;
             border-radius: 10px;
             border: 3px solid orange;
             -webkit-user-select: none;
             user-select: none;
+            left: 0;
+            top: 0;
         }
         
         .game-score {
@@ -215,6 +217,16 @@
             const answer = confirm("Сосал? (OK = Да)");
             if (answer) {
                 clickCount++;
+                
+                // Анимация тряски кнопки
+                this.style.transform = 'translateX(5px)';
+                setTimeout(() => {
+                    this.style.transform = 'translateX(-5px)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 100);
+                }, 100);
+                
                 startGame();
             }
         });
@@ -230,8 +242,12 @@
             // Начальная позиция
             targetX = Math.random() * (window.innerWidth - targetSize);
             targetY = Math.random() * (window.innerHeight - targetSize);
-            velocityX = (Math.random() - 0.5) * 4;
-            velocityY = (Math.random() - 0.5) * 4;
+            velocityX = (Math.random() - 0.5) * 3;
+            velocityY = (Math.random() - 0.5) * 3;
+            
+            // Установка начальной позиции
+            gameTarget.style.left = `${targetX}px`;
+            gameTarget.style.top = `${targetY}px`;
             
             updateTargetPosition();
         }
@@ -242,24 +258,36 @@
             
             const maxX = window.innerWidth - targetSize;
             const maxY = window.innerHeight - targetSize;
+            const maxSpeed = 5;
             
-            // Проверка границ
-            if (targetX <= 0 || targetX >= maxX) {
-                velocityX = -velocityX * 0.9;
-                targetX = Math.max(0, Math.min(targetX, maxX));
+            // Проверка границ с жёсткой фиксацией
+            if (targetX < 0) {
+                targetX = 0;
+                velocityX = -velocityX * 0.8;
+            } else if (targetX > maxX) {
+                targetX = maxX;
+                velocityX = -velocityX * 0.8;
             }
             
-            if (targetY <= 0 || targetY >= maxY) {
-                velocityY = -velocityY * 0.9;
-                targetY = Math.max(0, Math.min(targetY, maxY));
+            if (targetY < 0) {
+                targetY = 0;
+                velocityY = -velocityY * 0.8;
+            } else if (targetY > maxY) {
+                targetY = maxY;
+                velocityY = -velocityY * 0.8;
             }
+            
+            // Ограничение скорости
+            velocityX = Math.max(-maxSpeed, Math.min(maxSpeed, velocityX));
+            velocityY = Math.max(-maxSpeed, Math.min(maxSpeed, velocityY));
             
             // Обновление позиции
             targetX += velocityX;
             targetY += velocityY;
             
             // Применение позиции
-            gameTarget.style.transform = `translate(${targetX}px, ${targetY}px)`;
+            gameTarget.style.left = `${targetX}px`;
+            gameTarget.style.top = `${targetY}px`;
             
             animationFrameId = requestAnimationFrame(updateTargetPosition);
         }
@@ -275,7 +303,10 @@
             this.style.border = '3px solid lime';
             setTimeout(() => this.style.border = '3px solid orange', 200);
             
-            if (gameScore >= 10) endGame();
+            // Проверка на победу
+            if (gameScore >= 10) {
+                endGame();
+            }
         });
         
         // Завершение игры
@@ -291,6 +322,7 @@
             gameActive = false;
             cancelAnimationFrame(animationFrameId);
             gameOverlay.style.display = 'none';
+            clickCount = 0;
         });
         
         // Обработчик изменения размера экрана
@@ -298,6 +330,8 @@
             if (gameActive) {
                 targetX = Math.min(targetX, window.innerWidth - targetSize);
                 targetY = Math.min(targetY, window.innerHeight - targetSize);
+                gameTarget.style.left = `${targetX}px`;
+                gameTarget.style.top = `${targetY}px`;
             }
         });
     </script>
